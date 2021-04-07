@@ -1,3 +1,3 @@
-Welcome to your new project! 
+Welcome to your new project!
 
-Please read WIKI page for more information about the ongoing situation. Good luck!
+Please read your issues page to see the task we need to be done!
