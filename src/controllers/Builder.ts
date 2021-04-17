@@ -26,6 +26,7 @@ export default class Builder implements IBuilder {
   }
 
   private makeUsers() {
+    console.log(`Making ${this.usersCount} users...`);
     return User.createBulk(this.usersCount);
   }
 
@@ -34,10 +35,9 @@ export default class Builder implements IBuilder {
       throw new Error('Users mock is empty, need to create users first');
     }
 
-    return [...Array(this.accountsCount)].map((_, key) => {
-      const randomUser = this.users[Math.floor(Math.random() * this.users.length)];
-      return Account.create(randomUser.id);
-    });
+    console.log(`Making ${this.accountsCount} accounts...`);
+    const usersIds = this.users.map((user) => user.id);
+    return Account.createBulk(this.accountsCount, usersIds);
   }
 
   private makeInvoices() {
@@ -45,8 +45,8 @@ export default class Builder implements IBuilder {
       throw new Error('Accounts mock is empty, need to create accounts first');
     }
 
-    return [...Array(this.invoicesCount)].map((_, key) => {
-      return Invoice.create();
-    });
+    console.log(`Making ${this.invoicesCount} invoices...`);
+    const accountsIds = this.accounts.map((account) => account.id);
+    return Invoice.createBulk(this.invoicesCount, accountsIds);
   }
 }
