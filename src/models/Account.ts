@@ -9,6 +9,7 @@ interface IAccountClass {}
 
 export default class Account extends Dates implements IAccount, IAccountClass {
   constructor(
+    public userId: string,
     public id: string = faker.datatype.uuid(),
     public balance: number = faker.datatype.float(),
     public invoices: IInvoice[] = []
@@ -16,8 +17,8 @@ export default class Account extends Dates implements IAccount, IAccountClass {
     super();
   }
 
-  static create() {
-    const account = new this();
+  static create(userId: string) {
+    const account = new this(userId);
     // idedam i duomenu baze nauja irasa
 
     return account;

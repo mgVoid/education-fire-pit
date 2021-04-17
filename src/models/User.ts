@@ -1,9 +1,12 @@
 import faker from 'faker';
 
 import { IUser, CustomerType } from '../interfaces/User';
+import { Databases } from '../interfaces/General';
 import type { IAccount } from '../interfaces/Account';
 
 import Dates from './Dates';
+import { orm } from './';
+
 interface IUserClass {
   // findById: (id: string) => IUser;
   // getAll: () => IUser[];
@@ -17,6 +20,8 @@ export default class User extends Dates implements IUser, IUserClass {
     public accounts: IAccount[] = []
   ) {
     super();
+
+    // check if database file was created and create one if not
   }
 
   // Objekto sukurimui naudojam statini metoda, o ne tiesiog kur reik sukurti rasom: `new User()`
@@ -32,8 +37,13 @@ export default class User extends Dates implements IUser, IUserClass {
   }
 
   static createBulk(count: number) {
-    // [...Array(count)].forEach(() => new User());
-    // console.log(users);
+    const users: IUser[] = [...Array(count)].map((_, key) => {
+      return new this();
+    });
+
+    // idedam i duomenu baze
+    orm.writeToDatabase(Databases.USERS, users);
+    return users;
   }
 
   public getAll() {

@@ -1,7 +1,8 @@
 import Builder from './controllers/Builder';
-import User from './models/User';
-import Account from './models/Account';
-import Invoice from './models/Invoice';
+import { orm } from './models';
+// import User from './models/User';
+// import Account from './models/Account';
+// import Invoice from './models/Invoice';
 
 /**
  * Task description
@@ -16,13 +17,18 @@ import Invoice from './models/Invoice';
 //   invoices: [],
 // };
 
-const user = User.create();
-const account = new Account();
-const invoice = new Invoice();
+// const user = User.create();
+// const account = Account.create();
+// const invoice = Invoice.create();
 
-console.log(user);
-console.log(account.create());
-console.log(invoice.create());
+// console.log(user);
+// console.log(account);
+// console.log(invoice);
 // User.createBulk(10);
 // const usersModel = new User();
 // console.log(usersModel.getAll());
+
+orm.databaseInit();
+
+const builder = new Builder(1);
+builder.makeDatabase();

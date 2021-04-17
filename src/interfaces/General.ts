@@ -7,3 +7,9 @@ export interface ITimestamps {
 export interface IHasId {
   id: string;
 }
+
+export enum Databases {
+  USERS = 'users',
+  ACCOUNTS = 'accounts',
+  INVOICES = 'invoices',
+}
