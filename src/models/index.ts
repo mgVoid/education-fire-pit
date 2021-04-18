@@ -29,7 +29,7 @@ const readDatabase = () => {
   return JSON.parse(data);
 };
 
-const writeToDatabase = (database: Databases, data: IUser[] | IAccount[] | IInvoice[]) => {
+const writeToDatabase = async (database: Databases, data: IUser[] | IAccount[] | IInvoice[]) => {
   const dbData = readDatabase();
 
   return fs.writeFileSync(

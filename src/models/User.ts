@@ -5,12 +5,11 @@ import { Databases } from '../interfaces/General';
 import type { IAccount } from '../interfaces/Account';
 
 import Dates from './Dates';
+import Account from './Account';
+import Invoice from './Invoice';
 import { orm } from './';
 
-interface IUserClass {
-  // findById: (id: string) => IUser;
-  // getAll: () => IUser[];
-}
+interface IUserClass {}
 
 export default class User extends Dates implements IUser, IUserClass {
   constructor(
@@ -36,21 +35,41 @@ export default class User extends Dates implements IUser, IUserClass {
     return user;
   }
 
-  static createBulk(count: number) {
+  static async createBulk(count: number) {
     const users: IUser[] = [...Array(count)].map((_, key) => {
       return new this();
     });
 
     // idedam i duomenu baze
-    orm.writeToDatabase(Databases.USERS, users);
+    await orm.writeToDatabase(Databases.USERS, users);
     return users;
   }
 
-  public getAll() {
-    // return users;
+  static async findAll(): Promise<IUser[]> {
+    const { users } = await orm.readDatabase();
+
+    return users;
   }
 
-  public findById(id: string) {
-    // return users.find((user) => user.id === id);
+  static async findById(id: string): Promise<IUser> {
+    const { users } = await orm.readDatabase();
+    const user = users.find((user) => user.id === id);
+
+    if (!user) {
+      throw new Error(`User by specified id ${id} was not found`);
+    }
+
+    return user;
+  }
+
+  static async getWithRelations(id: string): Promise<IUser> {
+    const user = await this.findById(id);
+    const accounts = await Account.getUserAccounts(user.id);
+    const accountsWithInvoices = accounts.map(async (account) => ({
+      ...account,
+      invoices: await Invoice.getAccountInvoices(account.id),
+    }));
+
+    return { ...user, accounts: await Promise.all(accountsWithInvoices) };
   }
 }

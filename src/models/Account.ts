@@ -23,14 +23,19 @@ export default class Account extends Dates implements IAccount, IAccountClass {
     return new this(userId);
   }
 
-  static createBulk(count: number, usersIds: string[]) {
-    const accounts: IAccount[] = [...Array(count)].map((_, key) => {
+  static async createBulk(count: number, usersIds: string[]) {
+    const accounts: IAccount[] = [...Array(count)].map(() => {
       const randomUserId = usersIds[Math.floor(Math.random() * usersIds.length)];
 
       return new this(randomUserId);
     });
 
-    orm.writeToDatabase(Databases.ACCOUNTS, accounts);
+    await orm.writeToDatabase(Databases.ACCOUNTS, accounts);
     return accounts;
+  }
+
+  static async getUserAccounts(userId: string): Promise<IAccount[]> {
+    const { accounts } = await orm.readDatabase();
+    return accounts.filter((account) => account.userId === userId);
   }
 }

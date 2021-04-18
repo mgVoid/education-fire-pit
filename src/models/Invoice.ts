@@ -26,14 +26,19 @@ export default class Invoice extends Dates implements IInvoice, IINvoiceClass {
     return invoice;
   }
 
-  static createBulk(count: number, accountsIds: string[]) {
-    const invoices: IInvoice[] = [...Array(count)].map((_, key) => {
+  static async createBulk(count: number, accountsIds: string[]) {
+    const invoices: IInvoice[] = [...Array(count)].map((_) => {
       const randomAccountID = accountsIds[Math.floor(Math.random() * accountsIds.length)];
 
       return new this(randomAccountID);
     });
 
-    orm.writeToDatabase(Databases.INVOICES, invoices);
+    await orm.writeToDatabase(Databases.INVOICES, invoices);
     return invoices;
+  }
+
+  static async getAccountInvoices(accountId: string): Promise<IInvoice[]> {
+    const { invoices } = await orm.readDatabase();
+    return invoices.filter((invoice) => invoice.accountId === accountId);
   }
 }

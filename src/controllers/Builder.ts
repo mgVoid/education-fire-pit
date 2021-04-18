@@ -19,18 +19,18 @@ export default class Builder implements IBuilder {
     private invoicesCount: number = 30
   ) {}
 
-  public makeDatabase() {
-    this.users = this.makeUsers();
-    this.accounts = this.makeAccounts();
-    this.invoices = this.makeInvoices();
+  public async makeDatabase() {
+    this.users = await this.makeUsers();
+    this.accounts = await this.makeAccounts();
+    this.invoices = await this.makeInvoices();
   }
 
-  private makeUsers() {
+  private async makeUsers() {
     console.log(`Making ${this.usersCount} users...`);
     return User.createBulk(this.usersCount);
   }
 
-  private makeAccounts() {
+  private async makeAccounts() {
     if (!this.users.length) {
       throw new Error('Users mock is empty, need to create users first');
     }
@@ -40,7 +40,7 @@ export default class Builder implements IBuilder {
     return Account.createBulk(this.accountsCount, usersIds);
   }
 
-  private makeInvoices() {
+  private async makeInvoices() {
     if (!this.accounts.length) {
       throw new Error('Accounts mock is empty, need to create accounts first');
     }
