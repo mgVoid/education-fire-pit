@@ -28,10 +28,10 @@ export default class User extends Dates implements IUser, IUserClass {
   // Tokiu atveju jau mes negalesim naudoti konstruktoriaus ir reikes statinio metodo
   // Kuris sukuria duomenu bazeje irasa ir tada jau mums grazina nauja klases objekta
   // Todel ir cia stengiames laikytis to conventiono, kad priprastumet
-  static create() {
-    const user = new this();
-    // idedam i duomenu baze nauja irasa
+  static async create({ name, customerType }: { name: string; customerType: CustomerType }) {
+    const user = new this(undefined, name, customerType);
 
+    await orm.writeToDatabase(Databases.USERS, [user]);
     return user;
   }
 
@@ -40,7 +40,6 @@ export default class User extends Dates implements IUser, IUserClass {
       return new this();
     });
 
-    // idedam i duomenu baze
     await orm.writeToDatabase(Databases.USERS, users);
     return users;
   }
@@ -71,5 +70,11 @@ export default class User extends Dates implements IUser, IUserClass {
     }));
 
     return { ...user, accounts: await Promise.all(accountsWithInvoices) };
+  }
+
+  static async doesUserExistsByName(name) {
+    const { users } = await orm.readDatabase();
+
+    return users.find((user) => user.name === name);
   }
 }

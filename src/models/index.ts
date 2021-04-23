@@ -41,11 +41,28 @@ const writeToDatabase = async (database: Databases, data: IUser[] | IAccount[] |
   );
 };
 
+const doesRecordsExists = (): boolean => {
+  let database;
+
+  try {
+    database = readDatabase();
+  } catch (e) {
+    return false;
+  }
+
+  if (!database.users.length) {
+    return false;
+  }
+
+  return true;
+};
+
 const orm = {
   databaseInit,
   databasePath,
   writeToDatabase,
   readDatabase,
+  doesRecordsExists,
 };
 
 export { User, Invoice, Account, orm };

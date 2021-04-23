@@ -1,15 +1,13 @@
-import Builder from './controllers/Builder';
-import { printRandomUserData } from './controllers/Analytics';
-import { orm } from './models';
+import 'dotenv/config';
 
-orm.databaseInit();
+import ValidateEnv from './utils/ValidateEnv';
+import Users from './controllers/Users';
+import App from './loaders/App';
 
-const usersCount = 3;
-const accountsCount = 5;
-const invoicesCount = 10;
-const builder = new Builder(usersCount, accountsCount, invoicesCount);
+ValidateEnv();
 
-(async () => {
-  await builder.makeDatabase();
-  await printRandomUserData();
-})();
+const app = new App([new Users()]);
+app
+  .listen()
+  .then(() => app.loadData())
+  .catch((error) => console.error(error));
