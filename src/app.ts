@@ -1,14 +1,15 @@
 import Database from './database/Database';
-import IDatabase from './database/IDatabase';
 import Builder from './controllers/Builder';
-import IBuilder from './controllers/IBuilder';
 import Analytics from './controllers/Analytics';
 
-const database: IDatabase = new Database(); // creating database instance
-database.databaseInit();
+Database.databaseInit();
 
-const builder: IBuilder = new Builder(database);
-builder.appendDataToDatabase();
+const usersCount = 3;
+const tagsCount = 5;
+const photosCount = 10;
+const builder = new Builder(usersCount, tagsCount, photosCount);
 
-const analytics = new Analytics(database);
-analytics.displayRandomUserData();
+(async () => {
+  await builder.appendNewDataToDatabase();
+  await Analytics.displayRandomUserData();
+})();
