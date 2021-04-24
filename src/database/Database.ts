@@ -30,6 +30,7 @@ export default class Database {
 
   public static async writeToDatabase(data: IUser[] | IPhoto[] | ITag[], databaseTable: DatabaseTableNames) {
     const dbData = await this.readDatabase();
+
     await fs.promises.writeFile(
       this.databasePath,
       JSON.stringify({
