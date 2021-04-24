@@ -1,58 +1,69 @@
 import faker from 'faker';
-import IDatabase from '../database/IDatabase';
-import { IUser, UserStatuses } from '../types';
+import Database from '../database/Database';
+import { IUser, UserStatuses, DatabaseTableNames } from '../types';
 import { Photo, Tag } from '.';
+import Dates from './Dates';
 
-export default class User implements IUser {
-  public id: string = faker.datatype.uuid();
-
+export default class User extends Dates implements IUser {
   // eslint-disable-next-line no-useless-constructor
   constructor(
+    public id: string = faker.datatype.uuid(),
     public firstName: string = faker.datatype.uuid(),
     public lastName: string = faker.datatype.uuid(),
     public pseudoname: string = faker.datatype.uuid(),
-    public status: UserStatuses = faker.random.arrayElement([
-      UserStatuses.ACTIVE,
-      UserStatuses.DISABLED,
-      UserStatuses.BANNED,
-    ])
-  ) {}
-
-  date = faker.date.future();
-  public createdAt: Date = this.date;
-  public updatedAt: Date = this.date;
-  public deletedAt: Date | null = null;
-
-  static createBulk(count: number): IUser[] {
-    return [...Array(count)].map((_, key) => {
-      return new this();
-    });
+    public status: UserStatuses = faker.random.arrayElement(Object.values(UserStatuses))
+  ) {
+    super();
   }
 
-  static findAll(database: IDatabase): IUser[] {
-    const wholeDatabase = database.readDatabase();
-    const { users } = wholeDatabase;
-    return users;
-  }
+  static async create() {
+    const user = new this();
 
-  static findById(id: string, database: IDatabase): IUser {
-    const users = this.findAll(database);
-    const user = users.find((user) => user.id === id);
-    if (!user) {
-      throw new Error(`User by specified id ${id} was not found`);
-    }
+    await Database.writeToDatabase([user], DatabaseTableNames.USERS);
+
     return user;
   }
 
-  static getUserWithRelations(id: string, database: IDatabase) {
-    const user: IUser = this.findById(id, database);
-    const photos = Photo.getUserPhotos(user.id, database);
-    const photosWithTags = photos.map((photo) => {
+  static async createBulk(count: number): Promise<IUser[]> {
+    const users = [...Array(count)].map((_, key) => {
+      return new this();
+    });
+
+    await Database.writeToDatabase(users, DatabaseTableNames.USERS);
+
+    return users;
+  }
+
+  static async findAll(): Promise<IUser[]> {
+    const { users } = await Database.readDatabase();
+
+    return users;
+  }
+
+  static async findById(id: string): Promise<IUser> {
+    const users = await this.findAll();
+
+    const user = users.find((user) => user.id === id);
+
+    if (!user) {
+      throw new Error(`User by specified id ${id} was not found`);
+    }
+
+    return user;
+  }
+
+  static async getUserWithRelations(id: string) {
+    const user: IUser = await this.findById(id);
+
+    const photos = await Photo.getUserPhotos(user.id);
+
+    const photosWithTags = photos.map(async (photo) => {
       return {
         ...photo,
-        tags: Tag.getPhotoTags(photo.id, database),
+        tags: await Tag.getPhotoTags(photo.id),
       };
     });
-    return { ...user, photos: photosWithTags };
+
+    return { ...user, photos: await Promise.all(photosWithTags) };
   }
 }

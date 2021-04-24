@@ -1,39 +1,50 @@
 import faker from 'faker';
-import IDatabase from '../database/IDatabase';
-import { IPhoto } from '../types';
+import Database from '../database/Database';
+import { IPhoto, DatabaseTableNames } from '../types';
+import Dates from './Dates';
 
-export default class Photo implements IPhoto {
-  public id: string = faker.datatype.uuid();
-
+export default class Photo extends Dates implements IPhoto {
   // eslint-disable-next-line no-useless-constructor
   constructor(
     public userId = '',
+    public id: string = faker.datatype.uuid(),
     public imgUrl: string = faker.image.imageUrl(),
     public verifiedStatus: boolean = faker.datatype.boolean(),
     public description: string = faker.commerce.productDescription(),
     public fireCount: number = faker.datatype.number({ min: 0, max: 100 })
-  ) {}
+  ) {
+    super();
+  }
 
-  date = faker.date.future();
-  public createdAt: Date = this.date;
-  public updatedAt: Date = this.date;
-  public deletedAt: Date | null = null;
+  static async create(userId: string) {
+    const photo = new this(userId);
 
-  static findAll(database: IDatabase): IPhoto[] {
-    const wholeDatabase = database.readDatabase();
-    const { photos } = wholeDatabase;
+    await Database.writeToDatabase([photo], DatabaseTableNames.PHOTOS);
+
+    return photo;
+  }
+
+  static async findAll(): Promise<IPhoto[]> {
+    const { photos } = await Database.readDatabase();
+
     return photos;
   }
 
-  static createBulk(count: number, usersIds: string[]): IPhoto[] {
-    return [...Array(count)].map(() => {
+  static async createBulk(count: number, usersIds: string[]): Promise<IPhoto[]> {
+    const photos = [...Array(count)].map(() => {
       const randomUserId = usersIds[Math.floor(Math.random() * usersIds.length)];
+
       return new this(randomUserId);
     });
+
+    await Database.writeToDatabase(photos, DatabaseTableNames.PHOTOS);
+
+    return photos;
   }
 
-  static getUserPhotos(userId: string, database: IDatabase): IPhoto[] {
-    const photos = this.findAll(database);
+  static async getUserPhotos(userId: string): Promise<IPhoto[]> {
+    const photos = await this.findAll();
+
     return photos.filter((photo) => photo.userId === userId);
   }
 }
