@@ -1,6 +1,6 @@
-import { IHasId, IHasTimestamp } from '.';
+import { IHasId } from '.';
 
-export default interface IPhoto extends IHasId, IHasTimestamp {
+export default interface IPhoto extends IHasId {
   userId: string;
   imgUrl: string;
   verifiedStatus: boolean;

@@ -1,6 +1,6 @@
-import { IHasId, IHasTimestamp } from '.';
+import { IHasId } from '.';
 
-export default interface Tag extends IHasId, IHasTimestamp {
+export default interface Tag extends IHasId {
   photoId: string;
   tag: string;
 }
