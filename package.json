@@ -33,6 +33,7 @@
   "dependencies": {
     "@types/faker": "^5.5.1",
     "faker": "^5.5.3",
+    "fs.promises.exists": "^1.0.0",
     "ts-node": "^9.1.1"
   }
 }
