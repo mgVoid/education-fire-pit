@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/gediminasnn/ts-node-konkurenta-task-1#readme",
   "devDependencies": {
+    "@types/faker": "^5.5.3",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "eslint": "^7.24.0",
     "eslint-config-airbnb": "^18.2.1",
@@ -31,7 +32,6 @@
     "ts-node-dev": "^1.1.6"
   },
   "dependencies": {
-    "@types/faker": "^5.5.1",
     "faker": "^5.5.3",
     "fs.promises.exists": "^1.0.0",
     "ts-node": "^9.1.1"
