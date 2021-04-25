@@ -4,7 +4,11 @@ import { ITag, DatabaseTableNames } from '../types';
 import Dates from './Dates';
 
 export default class Tag extends Dates implements ITag {
-  constructor(public photoId = '', public id: string = faker.datatype.uuid(), public tag: string = faker.name.title()) {
+  constructor(
+    public photoId = undefined,
+    public id: string = faker.datatype.uuid(),
+    public tag: string = faker.name.title()
+  ) {
     super();
   }
 
