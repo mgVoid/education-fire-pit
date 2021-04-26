@@ -17,7 +17,7 @@ export default class Database {
   }
 
   public static async readDatabase() {
-    if (!fs.existsSync(this.databasePath)) {
+    if (!(await fsExists(this.databasePath))) {
       throw new Error('Database does not exists');
     }
 
