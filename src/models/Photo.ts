@@ -14,6 +14,7 @@ export default class Photo extends Dates implements IPhoto {
     public fireCount: number = faker.datatype.number({ min: 0, max: 100 })
   ) {
     super();
+
     if (this.userId === undefined) {
       throw new Error('userId is undefined');
     }
