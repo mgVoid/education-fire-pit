@@ -6,7 +6,7 @@ import Dates from './Dates';
 export default class Photo extends Dates implements IPhoto {
   // eslint-disable-next-line no-useless-constructor
   constructor(
-    public userId = undefined,
+    public userId: string,
     public id: string = faker.datatype.uuid(),
     public imgUrl: string = faker.image.imageUrl(),
     public verifiedStatus: boolean = faker.datatype.boolean(),
