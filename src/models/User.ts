@@ -26,7 +26,7 @@ export default class User extends Dates implements IUser {
   }
 
   static async createBulk(count: number): Promise<IUser[]> {
-    const users = [...Array(count)].map((_, key) => {
+    const users = [...Array(count)].map(() => {
       return new this();
     });
 
