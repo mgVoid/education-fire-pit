@@ -7,9 +7,7 @@ export default class Database {
   public static databasePath = path.resolve(`${__dirname}/../../database.json`);
 
   public static async databaseInit() {
-    const doesDatabaseExist = await fsExists(this.databasePath);
-
-    if (!doesDatabaseExist) {
+    if (!(await fsExists(this.databasePath))) {
       const database: DatabaseTemplate = { users: [], photos: [], tags: [] };
 
       await fs.promises.writeFile(this.databasePath, JSON.stringify(database));
