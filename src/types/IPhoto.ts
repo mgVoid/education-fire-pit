@@ -1,7 +1,7 @@
 import type { IUser, IHasId, IHasTimestamp } from '.';
 
 export default interface IPhoto extends IHasId, IHasTimestamp {
-  userId: string;
+  userId: IUser['id'];
   imgUrl: string;
   verifiedStatus: boolean;
   description: string;
