@@ -1,4 +1,4 @@
-import { IUser, IPhoto, ITag } from '.';
+import type { IUser, IPhoto, ITag } from '.';
 
 type DatabaseTemplate = {
   users: IUser[];

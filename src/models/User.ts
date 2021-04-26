@@ -1,6 +1,7 @@
 import faker from 'faker';
 import Database from '../database/Database';
-import { IUser, UserStatuses, DatabaseTableNames } from '../types';
+import type { IUser } from '../types';
+import { DatabaseTableNames, UserStatuses } from '../types';
 import { Photo, Tag } from '.';
 import Dates from './Dates';
 

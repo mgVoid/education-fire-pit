@@ -1,6 +1,7 @@
 import faker from 'faker';
 import Database from '../database/Database';
-import { IPhoto, DatabaseTableNames } from '../types';
+import type { IPhoto } from '../types';
+import { DatabaseTableNames } from '../types';
 import Dates from './Dates';
 
 export default class Photo extends Dates implements IPhoto {

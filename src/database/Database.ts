@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import fsExists from 'fs.promises.exists';
-import { IUser, IPhoto, ITag, DatabaseTableNames, DatabaseTemplate } from '../types';
+import type { IUser, IPhoto, ITag, DatabaseTableNames, DatabaseTemplate } from '../types';
 
 export default class Database {
   public static databasePath = path.resolve(`${__dirname}/../../database.json`);

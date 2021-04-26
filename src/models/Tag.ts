@@ -1,6 +1,7 @@
 import faker from 'faker';
 import Database from '../database/Database';
-import { ITag, DatabaseTableNames } from '../types';
+import type { ITag } from '../types';
+import { DatabaseTableNames } from '../types';
 import Dates from './Dates';
 
 export default class Tag extends Dates implements ITag {

@@ -1,4 +1,4 @@
-import { IHasId, IHasTimestamp, UserStatuses } from '.';
+import type { IHasId, IHasTimestamp, UserStatuses } from '.';
 
 export default interface User extends IHasId, IHasTimestamp {
   firstName: string;

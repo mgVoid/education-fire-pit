@@ -1,5 +1,5 @@
 import IBuilder from './IBuilder';
-import { IUser, IPhoto } from '../types';
+import type { IUser, IPhoto } from '../types';
 import { User, Photo, Tag } from '../models';
 
 export default class Builder implements IBuilder {
