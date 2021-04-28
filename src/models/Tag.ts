@@ -11,7 +11,8 @@ export default class Tag extends Dates implements ITag {
     public tag: string = faker.name.title()
   ) {
     super();
-    if (this.photoId === undefined) {
+
+    if (!this.photoId) {
       throw new Error('photoId is undefined');
     }
   }

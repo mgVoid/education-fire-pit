@@ -16,7 +16,7 @@ export default class Photo extends Dates implements IPhoto {
   ) {
     super();
 
-    if (this.userId === undefined) {
+    if (!this.userId) {
       throw new Error('userId is undefined');
     }
   }
