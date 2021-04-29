@@ -11,7 +11,7 @@ export default class Photo extends Dates implements IPhoto {
     public id: string = faker.datatype.uuid(),
     public imgUrl: string = faker.image.imageUrl(),
     public verifiedStatus: boolean = faker.datatype.boolean(),
-    public description: string = faker.commerce.productDescription(),
+    public description: string = faker.commerce.productDescription().substring(0, 500),
     public fireCount: number = faker.datatype.number({ min: 0, max: 100 })
   ) {
     super();
